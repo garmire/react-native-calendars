@@ -26,4 +26,3 @@ export default function getStyle(theme={}) {
     ...(theme[STYLESHEET_ID] || {})
   });
 }
-

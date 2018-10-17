@@ -26,8 +26,14 @@ export default function styleConstructor(theme={}) {
       backgroundColor: appStyle.selectedDayBackgroundColor,
       borderRadius: 16
     },
+    selectedToday: {
+      backgroundColor: appStyle.selectedDayTodayBackgroundColor,
+    },
     today: {
-      backgroundColor: appStyle.todayBackgroundColor
+      backgroundColor: appStyle.todayBackgroundColor,
+      borderRadius: 16,
+      borderColor: appStyle.selectedDayTodayBackgroundColor,
+      borderWidth: 1,//StyleSheet.hairlineWidth,
     },
     todayText: {
       color: appStyle.todayTextColor
@@ -41,7 +47,7 @@ export default function styleConstructor(theme={}) {
     dot: {
       width: 4,
       height: 4,
-      marginTop: 1,
+      marginTop: 0,
       borderRadius: 2,
       opacity: 0
     },

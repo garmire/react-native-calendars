@@ -61,7 +61,7 @@ class ReactComp extends Component {
   updateReservations(props) {
     const reservations = this.getReservations(props);
     if (this.list && !dateutils.sameDate(props.selectedDay, this.selectedDay)) {
-      let scrollPosition = 0;
+      let scrollPosition = this.props.scrollOffset || 0;
       for (let i = 0; i < reservations.scrollPosition; i++) {
         scrollPosition += this.heights[i] || 0;
       }
@@ -90,7 +90,7 @@ class ReactComp extends Component {
     let topRowOffset = 0;
     let topRow;
     for (topRow = 0; topRow < this.heights.length; topRow++) {
-      if (topRowOffset + this.heights[topRow] / 2 >= yOffset) {
+      if (topRowOffset + this.heights[topRow] >= yOffset) {
         break;
       }
       topRowOffset += this.heights[topRow];
@@ -114,6 +114,7 @@ class ReactComp extends Component {
       <View onLayout={this.onRowLayoutChange.bind(this, index)}>
         <Reservation
           item={item}
+          renderReservation={this.props.renderReservation}
           renderItem={this.props.renderItem}
           renderDay={this.props.renderDay}
           renderEmptyDate={this.props.renderEmptyDate}
@@ -124,21 +125,35 @@ class ReactComp extends Component {
     );
   }
 
+  // getReservationsForDay(iterator, props) {
+  //   const day = iterator.clone();
+  //   const res = props.reservations[day.toString('yyyy-MM-dd')];
+  //   if (res && res.length) {
+  //     return res.map((reservation, i) => {
+  //       return {
+  //         reservation,
+  //         date: i ? false : day,
+  //         day
+  //       };
+  //     });
+  //   } else if (res) {
+  //     return [{
+  //       date: iterator.clone(),
+  //       day
+  //     }];
+  //   } else {
+  //     return false;
+  //   }
+  // }
+
   getReservationsForDay(iterator, props) {
     const day = iterator.clone();
-    const res = props.reservations[day.toString('yyyy-MM-dd')];
-    if (res && res.length) {
-      return res.map((reservation, i) => {
-        return {
-          reservation,
-          date: i ? false : day,
-          day
-        };
-      });
-    } else if (res) {
+    const reservation = props.reservations[day.toString('yyyy-MM-dd')];
+    if (reservation) {
       return [{
-        date: iterator.clone(),
-        day
+        reservation,
+        day,
+        date: day,
       }];
     } else {
       return false;

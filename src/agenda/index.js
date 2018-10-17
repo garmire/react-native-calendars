@@ -119,6 +119,10 @@ export default class AgendaView extends Component {
     this.state.scrollY.addListener(({value}) => this.knobTracker.add(value));
   }
 
+  componentDidMount() {
+    this.calendar.scrollToDay(this.state.selectedDay.clone(), this.calendarOffset(), false);
+  }
+
   calendarOffset() {
     return 90 - (this.viewHeight / 2);
   }
@@ -143,6 +147,7 @@ export default class AgendaView extends Component {
   onLayout(event) {
     this.viewHeight = event.nativeEvent.layout.height;
     this.viewWidth = event.nativeEvent.layout.width;
+    //this.calendar.scrollToDay(this.state.selectedDay.clone(), this.calendarOffset(), false);
     this.forceUpdate();
   }
 
@@ -275,10 +280,13 @@ export default class AgendaView extends Component {
   renderReservations() {
     return (
       <ReservationsList
+        key={String(this.props.isDayView) + String(this.props.orientation)}
+        scrollOffset={this.props.scrollOffset}
         refreshControl={this.props.refreshControl}
         refreshing={this.props.refreshing}
         onRefresh={this.props.onRefresh}
         rowHasChanged={this.props.rowHasChanged}
+        renderReservation={this.props.renderReservation}
         renderItem={this.props.renderItem}
         renderDay={this.props.renderDay}
         renderEmptyDate={this.props.renderEmptyDate}
@@ -375,7 +383,7 @@ export default class AgendaView extends Component {
     let knob = (<View style={this.styles.knobContainer}/>);
 
     if (!this.props.hideKnob) {
-      const knobView = this.props.renderKnob ? this.props.renderKnob() : (<View style={this.styles.knob}/>);
+      const knobView = this.props.renderKnob ? this.props.renderKnob(headerTranslate) : (<View style={this.styles.knob}/>);
       knob = this.state.calendarScrollable ? null : (
         <View style={this.styles.knobContainer}>
           <View ref={(c) => this.knob = c}>{knobView}</View>
@@ -386,11 +394,13 @@ export default class AgendaView extends Component {
     return (
       <View onLayout={this.onLayout} style={[this.props.style, {flex: 1, overflow: 'hidden'}]}>
         <View style={this.styles.reservations}>
+          {this.props.renderReservationHeader && this.props.renderReservationHeader()}
           {this.renderReservations()}
         </View>
         <Animated.View style={headerStyle}>
           <Animated.View style={{flex:1, transform: [{ translateY: contentTranslate }]}}>
             <CalendarList
+              scrollServer={this.props.scrollServer}
               onLayout={() => {
                 this.calendar.scrollToDay(this.state.selectedDay.clone(), this.calendarOffset(), false);
               }}

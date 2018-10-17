@@ -35,7 +35,7 @@ class ReservationListItem extends Component {
     if (this.props.renderDay) {
       return this.props.renderDay(date ? xdateToData(date) : undefined, item);
     }
-    const today = dateutils.sameDate(date, XDate()) ? this.styles.today : undefined;
+    const today = dateutils.sameDate(date, XDate(true)) ? this.styles.today : undefined;
     if (date) {
       return (
         <View style={this.styles.day}>
@@ -52,6 +52,12 @@ class ReservationListItem extends Component {
 
   render() {
     const {reservation, date} = this.props.item;
+
+    if (this.props.renderReservation) {
+      let dateString = date.toString('yyyy-MM-dd');
+      return this.props.renderReservation(dateString, reservation);
+    }
+
     let content;
     if (reservation) {
       const firstItem = date ? true : false;
