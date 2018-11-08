@@ -396,6 +396,7 @@ export default class AgendaView extends Component {
         <View style={this.styles.reservations}>
           {this.props.renderReservationHeader && this.props.renderReservationHeader()}
           {this.renderReservations()}
+          {this.props.renderShadow && this.props.renderShadow()}
         </View>
         <Animated.View style={headerStyle}>
           <Animated.View style={{flex:1, transform: [{ translateY: contentTranslate }]}}>
