@@ -32,9 +32,18 @@ export default function styleConstructor(theme={}) {
     selectedToday: {
       backgroundColor: appStyle.selectedDayTodayBackgroundColor,
     },
+    selectedToday: {
+      backgroundColor: appStyle.selectedDayTodayBackgroundColor,
+    },
     today: {
       backgroundColor: appStyle.todayBackgroundColor,
+<<<<<<< HEAD
       borderColor: appStyle.selectedDayTodayBackgroundColor,
+=======
+      borderRadius: 16,
+      borderColor: appStyle.selectedDayTodayBackgroundColor,
+      borderWidth: 1,//StyleSheet.hairlineWidth,
+>>>>>>> ee6329ef5b176981263df8dcb4b4c3363647953e
     },
     todayText: {
       color: appStyle.todayTextColor
