@@ -66,6 +66,10 @@ class Day extends Component {
       if (marking.selectedColor) {
         containerStyle.push({backgroundColor: marking.selectedColor});
       }
+      if (this.props.state === 'today') {
+        containerStyle.push(this.style.today);
+        containerStyle.push(this.style.selectedToday);
+      }
       dotStyle.push(this.style.selectedDot);
       textStyle.push(this.style.selectedText);
     } else if (isDisabled) {

@@ -16,7 +16,7 @@ import ReservationsList from './reservation-list';
 import styleConstructor from './style';
 import { VelocityTracker } from '../input';
 
-const HEADER_HEIGHT = 104;
+const HEADER_HEIGHT = 105;
 const KNOB_HEIGHT = 24;
 
 //Fallback when RN version is < 0.44
@@ -119,6 +119,16 @@ export default class AgendaView extends Component {
     this.state.scrollY.addListener(({value}) => this.knobTracker.add(value));
   }
 
+  componentDidMount() {
+    this._isMounted = true;
+
+    // setTimeout(() => {
+    //   this.loadReservations(this.props);
+    // }, 0);
+
+    // this.calendar.scrollToDay(this.state.selectedDay.clone(), this.calendarOffset(), false);
+  }
+
   calendarOffset() {
     return 90 - (this.viewHeight / 2);
   }
@@ -143,6 +153,7 @@ export default class AgendaView extends Component {
   onLayout(event) {
     this.viewHeight = event.nativeEvent.layout.height;
     this.viewWidth = event.nativeEvent.layout.width;
+    this.calendar.scrollToDay(this.state.selectedDay.clone(), this.calendarOffset(), false);
     this.forceUpdate();
   }
 
@@ -207,10 +218,10 @@ export default class AgendaView extends Component {
     }
   }
 
-  componentWillMount() {
-    this._isMounted = true;
-    this.loadReservations(this.props);
-  }
+  // componentWillMount() {
+  //   this._isMounted = true;
+  //   this.loadReservations(this.props);
+  // }
 
   componentWillUnmount() {
     this._isMounted = false;
@@ -275,10 +286,12 @@ export default class AgendaView extends Component {
   renderReservations() {
     return (
       <ReservationsList
+        scrollOffset={this.props.scrollOffset}
         refreshControl={this.props.refreshControl}
         refreshing={this.props.refreshing}
         onRefresh={this.props.onRefresh}
         rowHasChanged={this.props.rowHasChanged}
+        renderReservation={this.props.renderReservation}
         renderItem={this.props.renderItem}
         renderDay={this.props.renderDay}
         renderEmptyDate={this.props.renderEmptyDate}
@@ -375,7 +388,7 @@ export default class AgendaView extends Component {
     let knob = (<View style={this.styles.knobContainer}/>);
 
     if (!this.props.hideKnob) {
-      const knobView = this.props.renderKnob ? this.props.renderKnob() : (<View style={this.styles.knob}/>);
+      const knobView = this.props.renderKnob ? this.props.renderKnob(headerTranslate) : (<View style={this.styles.knob}/>);
       knob = this.state.calendarScrollable ? null : (
         <View style={this.styles.knobContainer}>
           <View ref={(c) => this.knob = c}>{knobView}</View>
@@ -386,11 +399,14 @@ export default class AgendaView extends Component {
     return (
       <View onLayout={this.onLayout} style={[this.props.style, {flex: 1, overflow: 'hidden'}]}>
         <View style={this.styles.reservations}>
+          {this.props.renderReservationHeader && this.props.renderReservationHeader()}
           {this.renderReservations()}
+          {this.props.renderShadow && this.props.renderShadow()}
         </View>
         <Animated.View style={headerStyle}>
           <Animated.View style={{flex:1, transform: [{ translateY: contentTranslate }]}}>
             <CalendarList
+              scrollServer={this.props.scrollServer}
               onLayout={() => {
                 this.calendar.scrollToDay(this.state.selectedDay.clone(), this.calendarOffset(), false);
               }}

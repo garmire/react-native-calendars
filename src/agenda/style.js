@@ -27,7 +27,7 @@ export default function styleConstructor(theme = {}) {
       position: 'absolute',
       left: 0,
       right: 0,
-      height: 24,
+      height: 27,
       bottom: 0,
       alignItems: 'center',
       backgroundColor: appStyle.calendarBackground

@@ -13,6 +13,9 @@ import CalendarListItem from './item';
 
 const {width} = Dimensions.get('window');
 
+// import withScroll from '../withScroll';
+// const AnimatedFlatList = withScroll(FlatList, { noScrollBehind: true });
+
 class CalendarList extends Component {
   static propTypes = {
     ...Calendar.propTypes,
@@ -65,7 +68,7 @@ class CalendarList extends Component {
 
     const rows = [];
     const texts = [];
-    const date = parseDate(props.current) || XDate();
+    const date = parseDate(props.current) || XDate(true);
     for (let i = 0; i <= this.props.pastScrollRange + this.props.futureScrollRange; i++) {
       const rangeDate = date.clone().addMonths(i - this.props.pastScrollRange, true);
       const rangeDateStr = rangeDate.toString('MMM yyyy');
@@ -187,11 +190,11 @@ class CalendarList extends Component {
 
   renderCalendar({item}) {
     return (
-      <CalendarListItem 
-        item={item} 
-        calendarHeight={this.props.calendarHeight} 
-        calendarWidth={this.props.horizontal ? this.props.calendarWidth : undefined} 
-        {...this.props} 
+      <CalendarListItem
+        item={item}
+        calendarHeight={this.props.calendarHeight}
+        calendarWidth={this.props.horizontal ? this.props.calendarWidth : undefined}
+        {...this.props}
         style={this.props.calendarStyle}
       />
     );
@@ -209,11 +212,13 @@ class CalendarList extends Component {
   render() {
     return (
       <FlatList
+        //scrollServer={this.props.scrollServer}
         onLayout={this.onLayout}
         ref={(c) => this.listView = c}
         //scrollEventThrottle={1000}
         style={[this.style.container, this.props.style]}
-        initialListSize={this.props.pastScrollRange + this.props.futureScrollRange + 1}
+        //initialListSize={this.props.pastScrollRange + this.props.futureScrollRange + 1}
+        initialNumToRender={this.props.pastScrollRange + this.props.futureScrollRange + 1}
         data={this.state.rows}
         //snapToAlignment='start'
         //snapToInterval={this.calendarHeight}

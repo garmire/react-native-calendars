@@ -33,7 +33,9 @@
     "eslint-plugin-react": "^7.0.0",
     "jasmine": "^2.5.2",
     "semver": "5.x.x",
-    "shell-utils": "1.x.x",
+    "shell-utils": "1.x.x"
+  },
+  "peerDependencies": {
     "react": "16.8.3",
     "react-native": "0.59.3",
     "react-native-navigation": "2.13.1"

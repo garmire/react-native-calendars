@@ -9,6 +9,10 @@ export default function styleConstructor(theme={}) {
     base: {
       width: 32,
       height: 32,
+      borderRadius: 16,
+      borderWidth: 1,
+      backgroundColor: 'white',
+      borderColor: 'transparent',
       alignItems: 'center'
     },
     text: {
@@ -24,10 +28,13 @@ export default function styleConstructor(theme={}) {
     },
     selected: {
       backgroundColor: appStyle.selectedDayBackgroundColor,
-      borderRadius: 16
+    },
+    selectedToday: {
+      backgroundColor: appStyle.selectedDayTodayBackgroundColor,
     },
     today: {
-      backgroundColor: appStyle.todayBackgroundColor
+      backgroundColor: appStyle.todayBackgroundColor,
+      borderColor: appStyle.selectedDayTodayBackgroundColor,
     },
     todayText: {
       color: appStyle.todayTextColor
@@ -41,7 +48,7 @@ export default function styleConstructor(theme={}) {
     dot: {
       width: 4,
       height: 4,
-      marginTop: 1,
+      marginTop: 0,
       borderRadius: 2,
       opacity: 0
     },

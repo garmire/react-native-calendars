@@ -86,7 +86,7 @@ class Calendar extends Component {
     if (props.current) {
       currentMonth = parseDate(props.current);
     } else {
-      currentMonth = XDate();
+      currentMonth = XDate(true);
     }
     this.state = {
       currentMonth
