@@ -13,9 +13,6 @@ import CalendarListItem from './item';
 
 const {width} = Dimensions.get('window');
 
-// import withScroll from '../withScroll';
-// const AnimatedFlatList = withScroll(FlatList, { noScrollBehind: true });
-
 class CalendarList extends Component {
   static propTypes = {
     ...Calendar.propTypes,
@@ -132,29 +129,64 @@ class CalendarList extends Component {
     this.listView.scrollToOffset({offset: scrollAmount, animated: false});
   }
 
-  componentWillReceiveProps(props) {
+  // componentWillReceiveProps(props) {
+  //   const current = parseDate(this.props.current);
+  //   const nextCurrent = parseDate(props.current);
+  //   if (nextCurrent && current && nextCurrent.getTime() !== current.getTime()) {
+  //     this.scrollToMonth(nextCurrent);
+  //   }
+  //
+  //   const rowclone = this.state.rows;
+  //   const newrows = [];
+  //   for (let i = 0; i < rowclone.length; i++) {
+  //     let val = this.state.texts[i];
+  //     if (rowclone[i].getTime) {
+  //       val = rowclone[i].clone();
+  //       val.propbump = rowclone[i].propbump ? rowclone[i].propbump + 1 : 1;
+  //     }
+  //     newrows.push(val);
+  //   }
+  //   this.setState({
+  //     rows: newrows
+  //   });
+  // }
+
+  // componentDidMount() {
+  //   if (this.props.current) {
+  //     const current = parseDate(this.props.current);
+  //     this.scrollToMonth(current);
+  //   }
+  // }
+
+  componentDidUpdate(prevProps) {
     const current = parseDate(this.props.current);
-    const nextCurrent = parseDate(props.current);
-    if (nextCurrent && current && nextCurrent.getTime() !== current.getTime()) {
-      this.scrollToMonth(nextCurrent);
+    const prevCurrent = parseDate(prevProps.current);
+    if (current && (!prevCurrent || prevCurrent.getTime() !== current.getTime())) {
+      this.scrollToMonth(current);
     }
 
-    const rowclone = this.state.rows;
-    const newrows = [];
-    for (let i = 0; i < rowclone.length; i++) {
-      let val = this.state.texts[i];
-      if (rowclone[i].getTime) {
-        val = rowclone[i].clone();
-        val.propbump = rowclone[i].propbump ? rowclone[i].propbump + 1 : 1;
-      }
-      newrows.push(val);
-    }
-    this.setState({
-      rows: newrows
-    });
+    // const rowclone = this.state.rows;
+    // const newrows = [];
+    // for (let i = 0; i < rowclone.length; i++) {
+    //   let val = this.state.texts[i];
+    //   if (rowclone[i].getTime) {
+    //     val = rowclone[i].clone();
+    //     val.propbump = rowclone[i].propbump ? rowclone[i].propbump + 1 : 1;
+    //   }
+    //   newrows.push(val);
+    // }
+    // this.setState({
+    //   rows: newrows
+    // });
   }
 
   onViewableItemsChanged({viewableItems}) {
+    //todo: super hack to workaround FlatList occasional miscalculation of viewable items
+    if (!viewableItems || !viewableItems.length || viewableItems[0].index === 0) {
+      return;
+    }
+
+
     function rowIsCloseToViewable(index, distance) {
       for (let i = 0; i < viewableItems.length; i++) {
         if (Math.abs(index - parseInt(viewableItems[i].index)) <= distance) {
@@ -212,7 +244,6 @@ class CalendarList extends Component {
   render() {
     return (
       <FlatList
-        //scrollServer={this.props.scrollServer}
         onLayout={this.onLayout}
         ref={(c) => this.listView = c}
         //scrollEventThrottle={1000}
@@ -232,7 +263,7 @@ class CalendarList extends Component {
         showsHorizontalScrollIndicator={this.props.showScrollIndicator}
         scrollEnabled={this.props.scrollEnabled}
         keyExtractor={(item, index) => String(index)}
-        //initialScrollIndex={this.state.openDate ? this.getMonthIndex(this.state.openDate) : false}
+        initialScrollIndex={this.state.openDate ? this.getMonthIndex(this.state.openDate) : false}
         getItemLayout={this.getItemLayout}
         scrollsToTop={this.props.scrollsToTop}
       />

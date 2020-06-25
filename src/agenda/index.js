@@ -138,7 +138,7 @@ export default class AgendaView extends Component {
   }
 
   setScrollPadPosition(y, animated) {
-    this.scrollPad._component.scrollTo({x: 0, y, animated});
+    this.scrollPad.scrollTo({x: 0, y, animated});
   }
 
   onScrollPadLayout() {
@@ -406,7 +406,6 @@ export default class AgendaView extends Component {
         <Animated.View style={headerStyle}>
           <Animated.View style={{flex:1, transform: [{ translateY: contentTranslate }]}}>
             <CalendarList
-              scrollServer={this.props.scrollServer}
               onLayout={() => {
                 this.calendar.scrollToDay(this.state.selectedDay.clone(), this.calendarOffset(), false);
               }}
